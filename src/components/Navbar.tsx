@@ -3,7 +3,7 @@ import { For } from "solid-js";
 export const Navbar = (props: { fields: string[] }) => {
 
   return (
-    <nav class="bg-purple-900 border-gray-200 dark:bg-[#351a5b]">
+    <nav class="bg-purple-900 border-gray-200 bg-[#351a5b]">
       <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <A href="/app/home" class="flex items-center">
           <img src="https://www.solidjs.com/assets/logo-123b04bc.svg" class="h-8 mr-3" alt="Flowbite Logo" />
@@ -16,7 +16,7 @@ export const Navbar = (props: { fields: string[] }) => {
           </svg>
         </button>
         <div class="hidden w-full md:block md:w-auto" id="navbar-default">
-          <ul class="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-accent dark:border-gray-700">
+          <ul class="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg  md:flex-row md:space-x-8 md:mt-0 md:border-0  md:dark:bg-accent dark:border-gray-700">
             <For each={props.fields}>
               {(field) => (
                 <li>

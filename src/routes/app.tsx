@@ -8,9 +8,9 @@ import {  Headless  } from "../components/Headless";
  const Layout: VoidComponent = () => {
   return (
 <div>
-       <Navbar fields={["profiles","preferences"]} />
+       <Navbar fields={["profiles","preferences" ,"register"]} />
        <Headless >
-            <h1 class=" ">hello this from a protected route in therory</h1>
+            <h1 class=" " />
           <Outlet />
         </Headless>
 </div>
