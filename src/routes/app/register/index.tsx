@@ -1,14 +1,46 @@
-
+import  { trpc } from '~/utils/trpc';
+import {
+  POST, GET
+} from '~/routes/api/register';
+import { redirect, useRequest } from 'solid-start/server'
+import { setCookie } from 'undici';
+import { createCookie } from 'solid-start';
+import { createServerData$,createServerAction$ } from 'solid-start/server';
+import { createRouteAction } from 'solid-start';
+import { createCookieSessionStorage } from 'solid-start';
+import { createUserSession,getUser } from '~/lib/session';
+// 
 export default function Register() {
+    const redir = async () => {
+        createUserSession ( "hello" , "/app/profile" )
+    }
+    const [status, red] = createServerAction$(() => createUserSession ( "hello" , "/app/profiles" ))
+
+  
+const [data, setData] = createServerAction$((_,e) => {  
+ e.request
+    
+    
+    return  getUser(e.request)
+  } )
+  
+  
+
+  
+
+
   const handleSubmit = (e: Event) => {
     e.preventDefault();
-
-    const formData = new FormData(e.target as HTMLFormElement);
-      console.log("submitted");
-    const data = Object.fromEntries(formData.entries())
-    console.log(data);
-
-  };
+    setData().then(() => {
+      console.log(data.result?.data)
+      /*
+          red().then ( () => {
+              console.log("hello")
+          } )
+        */
+      // check the cookie is set
+    })
+} 
 
   return (
        <div class=" flex flex-col items-center justify-center 

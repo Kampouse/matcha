@@ -6,8 +6,11 @@ import { set } from "zod";
 export const createContextInner = async (
   opts: createSolidAPIHandlerContext
 ) => {
+
+
+  const { req, res } = opts;
   return {
-    ...opts, Turso
+    req, res, Turso
   };
 };
 

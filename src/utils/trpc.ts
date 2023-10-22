@@ -11,14 +11,40 @@ const getBaseUrl = () => {
   return `http://localhost:${process.env.PORT ?? 5454}`;
 };
 
+let token: string;
+export function setToken(newToken: string) {
+  /**
+   * You can also save the token to cookies, and initialize from
+   * cookies above.
+   */
+  console.log("setToken", newToken);
+  document.cookie = `token=${newToken}; path=/;`;
+  token = newToken;
+}
+
+
+
 export const trpc = createTRPCSolidStart<IAppRouter>({
   config() {
     return {
       links: [
         httpBatchLink({
           url: `${getBaseUrl()}/api/trpc`,
+          headers() {
+            return {
+              // save to cookie
+
+              Authorization: token,
+            };
+          }
+
+
+
+
         }),
+
       ],
+
     };
   },
 });

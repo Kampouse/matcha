@@ -11,6 +11,9 @@ dependencies:
   '@solid-mediakit/trpc':
     specifier: ^1.0.2
     version: 1.0.2(@tanstack/solid-query@5.0.0)(@trpc/client@10.41.0)(@trpc/server@10.41.0)(solid-js@1.8.3)(solid-start@0.3.7)
+  '@solid-primitives/start':
+    specifier: ^0.0.2
+    version: 0.0.2(solid-js@1.8.3)(solid-start@0.3.7)
   '@solidjs/meta':
     specifier: ^0.28.6
     version: 0.28.6(solid-js@1.8.3)
@@ -1861,6 +1864,16 @@ packages:
       '@tanstack/solid-query': 5.0.0(solid-js@1.8.3)
       '@trpc/client': 10.41.0(@trpc/server@10.41.0)
       '@trpc/server': 10.41.0
+      solid-js: 1.8.3
+      solid-start: 0.3.7(@solidjs/meta@0.28.6)(@solidjs/router@0.8.3)(solid-js@1.8.3)(solid-start-node@0.3.7)(solid-start-vercel@0.3.7)(vite@4.1.2)
+    dev: false
+
+  /@solid-primitives/start@0.0.2(solid-js@1.8.3)(solid-start@0.3.7):
+    resolution: {integrity: sha512-IO+bu0tf18LDyHR+wSZtQpJ6dUnaq0aK4nJTMIrsbLcrFYx9ghz3k80j35ejZgltdT8GdIUMfQG83dHSr+CXNA==}
+    peerDependencies:
+      solid-js: ^1.6.12
+      solid-start: '>=0.2.26'
+    dependencies:
       solid-js: 1.8.3
       solid-start: 0.3.7(@solidjs/meta@0.28.6)(@solidjs/router@0.8.3)(solid-js@1.8.3)(solid-start-node@0.3.7)(solid-start-vercel@0.3.7)(vite@4.1.2)
     dev: false
