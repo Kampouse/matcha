@@ -14,24 +14,56 @@ export default function Register() {
     const redir = async () => {
         createUserSession ( "hello" , "/app/profile" )
     }
-    const [status, red] = createServerAction$(() => createUserSession ( "hello" , "/app/profiles" ))
+    const [Form, sendForm] = createServerAction$(() => createUserSession ( "hello" , "/app/profiles" ))
+
+ 
+const hello = "hello"  
 
   
+
+
+
+
+
+
+  
+ //  send data to the server the form data  
+  const [form, setForm] = createServerAction$(async (form: FormData, { request }) => {
+
+    if (!form.get("field_one")) {
+       console.log("hello from server")
+      return  { error: "field_one is required"}
+    } 
+     console.log(form.get("field_one"))
+    
+   return (createUserSession ( "hello" , "/app/profiles" ))
+  })
+  
+
 const [data, setData] = createServerAction$((_,e) => {  
- e.request
-    
-    
-    return  getUser(e.request)
+  e.request.formData().then((data) => {
+     console.log(data.get("field_one"))
+  })
+    return  getUser(e.request)  
   } )
   
-  
-
-  
-
-
   const handleSubmit = (e: Event) => {
+    const form = e.target as HTMLFormElement;
+    // get form data 
+    const formData = new FormData(form);
+    // this will send data to the server 
+     console.log(formData.get("field_one"))
+     setForm(formData).then((data) => {
+       if (typeof data === "string") {
+         console.log(data)
+       }
+        console.log("hello")
+      })
+    //form data 
+    
     e.preventDefault();
     setData().then(() => {
+
       console.log(data.result?.data)
       /*
           red().then ( () => {
@@ -39,14 +71,14 @@ const [data, setData] = createServerAction$((_,e) => {
           } )
         */
       // check the cookie is set
-    })
+          })
 } 
 
   return (
        <div class=" flex flex-col items-center justify-center 
        border border-1 border-gray-900 rounded-lg  my-[100px] p-[2em]"  >
       <h1> Register to this shit fest </h1>
-      <form onSubmit={(e) => handleSubmit(e)}> 
+               <form onSubmit={(e) => handleSubmit(e)}> 
     <div class={"flex flex-col items-center justify-center    w-96 h-[25rem] border-1  "}>
            
       <div class="flex flex-col items-center justify-center    w-96 h-[25rem] border-1  ">

@@ -7,9 +7,8 @@ import { createUserSession } from '~/lib/session';
 
 export function GET() {
 
+    return " <h1>Register to this shit fest < /h1>"
 
-
-    return json({ hello: "world" });
 
 
 }

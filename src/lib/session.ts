@@ -18,6 +18,7 @@ export async function getUser(request: Request) {
     return session
 }
 
+// create user session and redirect to a given path
 export async function createUserSession(userId: string, redirectTo: string) {
     const session = await storage.getSession();
     console.log("createUserSession", userId, redirectTo);
