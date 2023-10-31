@@ -15,7 +15,7 @@ export const appRouter = router({
   register
 });
 const ctx = useServerContext();
-const header = ctx.request.headers as unknown as Record<string, unknown>;
+const header = { "Set-Cookie": ctx.request?.headers }
 export const caller = appRouter.createCaller({
   req: ctx.request,
   res: {
