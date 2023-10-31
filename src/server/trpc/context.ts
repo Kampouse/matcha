@@ -4,8 +4,7 @@ import { Turso } from './database';
 import type { createSolidAPIHandlerContext } from "solid-start-trpc";
 import { set } from "zod";
 export const createContextInner = async (
-  opts: createSolidAPIHandlerContext
-) => {
+  opts: createSolidAPIHandlerContext) => {
 
 
   const { req, res } = opts;

@@ -3,9 +3,10 @@ import {
 } from '~/routes/api/register';
 import { createServerData$, createServerAction$ } from 'solid-start/server';
 import { createUserSession, getUser } from '~/lib/session';
-import z from 'zod';
+import type z from 'zod';
 import { ZodType } from "~/utils/schemas"
 import { catchError } from 'solid-js';
+import { caller }  from "~/server/trpc/router/_app"
 
 // 
 const { formSchema } = ZodType()
@@ -18,8 +19,9 @@ export default function Register() {
   const [Form, sendForm] = createServerAction$(() => createUserSession("hello", "/app/profiles"))
   //  send data to the server the form data  
   const [form, setForm] = createServerAction$(async (form: FormData, { request }) => {
-    const data = formSchema.parse(form)
-    return data.email
+       const content =  formSchema.parse(form)
+     const output =  await caller.register.register(content)
+      return output
   })
   const Validation = (formData: FormData) => {
     type registerForm = z.infer<typeof formSchema> | z.ZodIssue[]
