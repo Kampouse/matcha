@@ -19,7 +19,7 @@ export type resolve = {
 }
 
 export function POST() {
-    createUserSession("kamp", "/")
+    // createUserSession("kamp", "/")
 
 
 

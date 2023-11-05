@@ -4,22 +4,36 @@
     "dev": "solid-start dev --port 5454",
     "start": "solid-start start --port 5454",
     "build": "solid-start build",
-    "lint": "eslint --fix \"**/*.{ts,tsx,js,jsx}\""
+    "lint": "eslint --fix \"**/*.{ts,tsx,js,jsx}\"", 
+    "test": "vite test",
+    "test-watch": "vitest",
+    "test-ui": "vitest --ui",
+    "coverage": "vitest run --coverage"
+
+
+
+
   },
   "type": "module",
   "devDependencies": {
+    "@solidjs/testing-library": "^0.8.4",
+    "@testing-library/jest-dom": "^6.1.4",
     "@types/node": "^18.14.0",
     "@typescript-eslint/eslint-plugin": "^5.52.0",
     "@typescript-eslint/parser": "^5.52.0",
+    "@vitest/coverage-v8": "^0.34.6",
+    "@vitest/ui": "^0.34.6",
     "autoprefixer": "^10.4.13",
     "eslint": "^8.34.0",
     "eslint-plugin-solid": "^0.9.4",
+    "jsdom": "^22.1.0",
     "postcss": "^8.4.21",
     "solid-start-node": "^0.3.7",
     "solid-start-vercel": "^0.3.7",
     "tailwindcss": "^3.2.7",
     "typescript": "^4.9.5",
-    "vite": "^4.1.2"
+    "vite": "^4.1.2",
+    "vitest": "^0.34.6"
   },
   "dependencies": {
     "@libsql/client": "^0.3.6",
