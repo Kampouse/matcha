@@ -2,7 +2,7 @@ import {
   POST, GET
 } from '~/routes/api/register';
 import { createServerData$, createServerAction$, redirect } from 'solid-start/server';
-import { createUserSession, getUser } from '~/lib/session';
+import { createUserSession, getUser, UserSession } from '~/lib/session';
 import type z from 'zod';
 import { registerFormSchema } from "~/utils/schemas"
 import { catchError } from 'solid-js';
@@ -21,7 +21,34 @@ export default function Register() {
   })
 
 
-  const [Cookie, sendCookie] = createServerAction$(() => createUserSession("hello", "/app/profiles"))
+  const [Cookie, sendCookie] = createServerAction$((user:FormData) =>  { 
+
+
+  const  cookie = {  
+    email: user.get("email") as string,
+    username: user.get("username") as string,
+    userId : "1",
+    user  : true,
+  loggedIn : true
+    
+   } 
+
+
+
+
+
+    return createUserSession(cookie, "/app/profiles")
+
+
+
+
+
+
+
+
+
+  }) 
+
   //  send data to the server the form data  
 
 
@@ -64,7 +91,7 @@ export default function Register() {
       console.log(e)
     }
 
-    sendCookie().then((servData) => { console.log(servData) }).then(() => { getus().then((servData) => { console.log(servData) }) })
+    sendCookie(data);
 
   }
 

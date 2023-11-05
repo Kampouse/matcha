@@ -19,10 +19,23 @@ export async function getUser(request: Request) {
 }
 
 // create user session and redirect to a given path
-export async function createUserSession(userId: string, redirectTo: string) {
+//
+export type UserSession = {
+    userId: string,
+    username: string,
+    loggedIn: boolean,
+    user: boolean
+}
+export async function createUserSession(user: UserSession, redirectTo: string) {
     const session = await storage.getSession();
-    console.log("createUserSession", userId, redirectTo);
-    session.set("userId", userId);
+    console.log("createUserSession", user.userId, redirectTo);
+
+
+
+    session.set("userId", user.userId);
+    session.set("username", user.username);
+    session.set("loggedIn", true);
+    session.set("user", true);
     return redirect(redirectTo, {
         headers: {
             "Set-Cookie": await storage.commitSession(session)
