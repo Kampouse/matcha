@@ -7,7 +7,6 @@ import { A } from "@solidjs/router"
  const Layout: VoidComponent = () => {
   return (
 <div>
-       <Navbar fields={["profiles","preferences" ,"register"]} />
        <Headless >
             <h1 class=" " />
           <Outlet />

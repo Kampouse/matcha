@@ -6,7 +6,6 @@ import {
 
 import { redirect } from "solid-start";
 import { getUser } from "./lib/session";
-const protectedPaths = ["/app/*"]; // add any route you wish in here
 export default createHandler(
   ({ forward }) => {
     return async event => {

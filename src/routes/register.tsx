@@ -2,6 +2,7 @@ import {
   POST, GET
 } from '~/routes/api/register';
 import { createServerData$, createServerAction$, redirect } from 'solid-start/server';
+import { Headless } from '~/components/HeadLess';
 import { createUserSession, getUser, UserSession } from '~/lib/session';
 import type z from 'zod';
 import { registerFormSchema } from "~/utils/schemas"
@@ -148,6 +149,7 @@ export default function Register() {
 
   //MockSumbit()
   return (
+      <Headless>
     <div class=" flex flex-col items-center justify-center 
        border border-1 border-gray-900 rounded-lg  my-[100px] p-[2em]"  >
       <h1> Register to this shit fest </h1>
@@ -171,6 +173,7 @@ export default function Register() {
       </form>
 
     </div>
+</Headless>
   );
 }
 
