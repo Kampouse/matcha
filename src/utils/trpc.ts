@@ -2,6 +2,7 @@ import { QueryClient } from "@tanstack/solid-query";
 import type { IAppRouter } from "~/server/trpc/router/_app";
 import { createTRPCSolidStart } from "@solid-mediakit/trpc";
 import { httpBatchLink } from "@trpc/client";
+import type { UserSession } from "~/lib/session";
 
 const getBaseUrl = () => {
   if (typeof window !== "undefined") return "";
@@ -12,14 +13,15 @@ const getBaseUrl = () => {
 };
 
 let token: string;
-export function setToken(newToken: string) {
+export function setToken(newToken: UserSession) {
   /**
    * You can also save the token to cookies, and initialize from
    * cookies above.
    */
-  console.log("setToken", newToken);
-  document.cookie = `token=${newToken}; path=/;`;
-  token = newToken;
+
+
+  //document.cookie = `token=${newToken}; path=/;`;
+  token = JSON.stringify(newToken);
 }
 
 

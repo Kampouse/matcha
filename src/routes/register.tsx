@@ -16,8 +16,8 @@ export default function Register() {
 
   const [user, getus] = createServerAction$(async (_, { request }) => {
     const data = await getUser(request)
-    console.log(data.data)
-    return data.data
+    console.log(data)
+    return data
 
   })
 
@@ -32,8 +32,9 @@ export default function Register() {
     user  : true,
   loggedIn : true
     
-   } 
+   }  
 
+   caller.register.cookie(cookie)
 
 
 

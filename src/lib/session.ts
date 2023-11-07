@@ -1,4 +1,5 @@
 import { createCookieSessionStorage } from "solid-start";
+import { z } from "zod";
 import { redirect } from "solid-start";
 const storage = createCookieSessionStorage({
     cookie: {
@@ -12,20 +13,35 @@ const storage = createCookieSessionStorage({
     }
 });
 
-export async function getUser(request: Request) {
-    const cookie = request.headers.get("Cookie") ?? "";
-    const session = storage.getSession(cookie);
-    return session
-}
-
 // create user session and redirect to a given path
 //
-export type UserSession = {
-    userId: string,
-    username: string,
-    loggedIn: boolean,
-    user: boolean
+//zod schema for user session
+export const userSessionSchema = z.object({
+    userId: z.string(),
+    username: z.string(),
+    loggedIn: z.boolean(),
+    user: z.boolean()
+});
+
+// user session type
+export type UserSession = z.infer<typeof userSessionSchema>;
+export async function getUser(request: Request) {
+    const cookie = request?.headers.get("Cookie") ?? "";
+
+    const session = storage.getSession(cookie);
+    console.log("getUser", cookie, session);
+    const sessionData = await storage.getSession(cookie);
+    if (!sessionData) {
+        return null;
+    }
+
+
+    return sessionData.data
 }
+
+
+
+
 export async function createUserSession(user: UserSession, redirectTo: string) {
     const session = await storage.getSession();
     console.log("createUserSession", user.userId, redirectTo);

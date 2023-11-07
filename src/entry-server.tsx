@@ -5,7 +5,8 @@ import {
 } from "solid-start/entry-server";
 
 import { redirect } from "solid-start";
-import { getUser } from "./lib/session";
+import { getUser, userSessionSchema } from "./lib/session";
+import { caller } from "./server/trpc/router/_app";
 export default createHandler(
   ({ forward }) => {
     return async event => {
@@ -14,14 +15,23 @@ export default createHandler(
       const run = false;
         const url = new URL(event.request.url)
         if (url.pathname.startsWith("/app/")) {
+           
           const user = await getUser(event.request)
+          if (user === null || user?.username === undefined ||
+            user.success === false || user?.username === undefined) {
+            if (user?.success === undefined) {
+              return redirect("/");
+            }
+            return redirect("/");
+          }
+          if (user === undefined) {
+            return redirect("/");
+          }
+             console.log("called from entry server")
+            caller.register.cookie(userSessionSchema.parse(user))
+        
           // change this to something cleaner or safer ? ???
           //remove the /app/ from the url
-          url.pathname = url.pathname.replace("/app/", "/")
-           
-          if (!user.data?.username) {
-            return redirect("/"); // a page for a non logged in user
-          }
         }
       return forward(event); // if we got here, and the pathname is inside the `protectedPaths` array - a user is logged in
     };
