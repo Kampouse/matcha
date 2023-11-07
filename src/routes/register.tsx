@@ -33,8 +33,9 @@ export default function Register() {
   loggedIn : true
     
    }  
-
+  // server side cookie 
    caller.register.cookie(cookie)
+   caller.database.example()
 
 
 

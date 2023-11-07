@@ -2,9 +2,28 @@ import { appRouter } from './router/_app';
 import type { inferAsyncReturnType } from "@trpc/server";
 import { Turso } from './database';
 import type { createSolidAPIHandlerContext } from "solid-start-trpc";
-import { getUser } from '~/lib/session';
 import { set } from "zod";
-import { useServerContext } from "solid-start";
+import { json, useServerContext } from "solid-start";
+import { userSessionSchema } from '~/lib/session';
+import { as } from 'vitest/dist/reporters-5f784f42';
+
+
+export async function getUserTPC(request: Request) {
+  const auth = request?.headers.get("Authorization") ?? "";
+  if (auth !== "") {
+    const user = JSON.parse(auth);
+    const output = userSessionSchema.safeParse(user);
+    if (output.success) {
+      return output.data;
+    }
+    else {
+      return null;
+    }
+  }
+  return null;
+}
+
+
 export const createContextInner = async (
   opts: createSolidAPIHandlerContext) => {
 
@@ -12,9 +31,18 @@ export const createContextInner = async (
 
 
 
+
+
+
+
   const { req, res } = opts;
+  const user = async () => {
+    return await getUserTPC(req);
+
+  }
+
   return {
-    req, res, Turso
+    req, res, Turso, user
   };
 };
 

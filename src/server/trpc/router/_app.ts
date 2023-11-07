@@ -1,6 +1,7 @@
 import { Turso } from './../database';
 import { router } from './../utils';
 import { createSolidAPIHandler, createSolidAPIHandlerContext } from 'solid-start-trpc';
+import { getUserTPC } from './../context';
 import { IContext, createContextInner, createContext } from './../context';
 import { t, procedure } from "~/server/trpc/utils"
 import { useServerContext } from "solid-start";
@@ -21,7 +22,8 @@ export const caller = appRouter.createCaller({
   res: {
     headers: header
   },
-  Turso: Turso
+  Turso: Turso,
+  user: async () => { return await getUserTPC(ctx.request) }
 
 })
 

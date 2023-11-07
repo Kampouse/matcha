@@ -17,18 +17,16 @@ export default createHandler(
         if (url.pathname.startsWith("/app/")) {
            
           const user = await getUser(event.request)
-          if (user === null || user?.username === undefined ||
-            user.success === false || user?.username === undefined) {
-            if (user?.success === undefined) {
-              return redirect("/");
-            }
-            return redirect("/");
-          }
-          if (user === undefined) {
-            return redirect("/");
-          }
-             console.log("called from entry server")
+          if ( user === null || user?.username === undefined )
+          {
+            return redirect("/", { status: 302 });
+
+          }          
+
             caller.register.cookie(userSessionSchema.parse(user))
+             console.log("called from entry server")
+
+
         
           // change this to something cleaner or safer ? ???
           //remove the /app/ from the url

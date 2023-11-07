@@ -26,8 +26,19 @@ export const userSessionSchema = z.object({
 // user session type
 export type UserSession = z.infer<typeof userSessionSchema>;
 export async function getUser(request: Request) {
-    const cookie = request?.headers.get("Cookie") ?? "";
+    const auth = request?.headers.get("Authorization") ?? "";
+    if (auth !== "") {
+        const user = JSON.parse(auth);
+        const output = userSessionSchema.safeParse(user);
+        if (output.success) {
+            return output.data;
+        }
+        else {
+            return null;
+        }
+    }
 
+    const cookie = request?.headers.get("Cookie") ?? "";
     const session = storage.getSession(cookie);
     console.log("getUser", cookie, session);
     const sessionData = await storage.getSession(cookie);
