@@ -23,7 +23,7 @@ export const caller = appRouter.createCaller({
     headers: header
   },
   Turso: Turso,
-  user: async () => { return await getUserTPC(ctx.request) }
+  getUserServerSide: () => { return null }
 
 })
 

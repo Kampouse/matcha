@@ -9,17 +9,20 @@ export const procedure = t.procedure;
 
 
 
-const proctedted = middleware(async (opts) => {
+const getServerUser = middleware(async (opts) => {
     const { ctx } = opts;
-    if (await ctx.user()) {
 
-        throw new TRPCError({ code: 'UNAUTHORIZED' });
+    if (await ctx.getUserServerSide()) {
+
+        return opts.next({ ctx: { user: await ctx.getUserServerSide() } });
     }
     return opts.next({
         ctx: {
-            user: ctx.user,
+            user: ctx.getUserServerSide(),
         },
     });
 });
 
-export const proc = procedure.use(proctedted);
+export const auth = procedure.use(getServerUser);
+
+

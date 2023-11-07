@@ -6,6 +6,8 @@ import { set } from "zod";
 import { json, useServerContext } from "solid-start";
 import { userSessionSchema } from '~/lib/session';
 import { as } from 'vitest/dist/reporters-5f784f42';
+import { getCookies } from 'undici';
+import { getToken } from '~/utils/trpc';
 
 
 export async function getUserTPC(request: Request) {
@@ -40,9 +42,21 @@ export const createContextInner = async (
     return await getUserTPC(req);
 
   }
+  const getUserServerSide = () => {
+
+    const serverSide = getToken();
+    if (serverSide === "" || serverSide === undefined) {
+      return null;
+    }
+    console.log("getUserServerSide", serverSide);
+    const data = JSON.parse(serverSide);
+    const output = userSessionSchema.safeParse(data);
+    return output.success ? output.data : null;
+  }
+
 
   return {
-    req, res, Turso, user
+    req, res, Turso, getUserServerSide
   };
 };
 

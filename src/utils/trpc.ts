@@ -4,6 +4,7 @@ import { createTRPCSolidStart } from "@solid-mediakit/trpc";
 import { httpBatchLink } from "@trpc/client";
 import type { UserSession } from "~/lib/session";
 
+let token: string;
 const getBaseUrl = () => {
   if (typeof window !== "undefined") return "";
   if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
@@ -12,7 +13,6 @@ const getBaseUrl = () => {
   return `http://localhost:${process.env.PORT ?? 5454}`;
 };
 
-let token: string;
 export function setToken(newToken: UserSession) {
   /**
    * You can also save the token to cookies, and initialize from
@@ -23,6 +23,7 @@ export function setToken(newToken: UserSession) {
   //document.cookie = `token=${newToken}; path=/;`;
   token = JSON.stringify(newToken);
 }
+export function getToken() { return token; }
 
 
 
