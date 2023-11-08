@@ -7,6 +7,7 @@ import {
 import { redirect } from "solid-start";
 import { getUser, userSessionSchema } from "./lib/session";
 import { caller } from "./server/trpc/router/_app";
+import { copyFileSync } from "fs";
 export default createHandler(
   ({ forward }) => {
     return async event => {
@@ -22,7 +23,7 @@ export default createHandler(
             return redirect("/", { status: 302 });
 
           }          
-
+            console.log("awaited",user)
             caller.register.cookie(userSessionSchema.parse(user))
              console.log("called from entry server")
 

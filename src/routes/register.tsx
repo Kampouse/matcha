@@ -1,6 +1,6 @@
 import {
   POST, GET
-} from '~/routes/api/register';
+} from '~/routes/api/session';
 import { createServerData$, createServerAction$, redirect } from 'solid-start/server';
 import { Headless } from '~/components/HeadLess';
 import { createUserSession, getUser, UserSession } from '~/lib/session';
@@ -9,52 +9,24 @@ import { registerFormSchema } from "~/utils/schemas"
 import { catchError } from 'solid-js';
 import { caller } from "~/server/trpc/router/_app"
 export default function Register() {
-
-
   type registerForm = z.infer<typeof registerFormSchema> | z.ZodIssue[]
-
-
   const [user, getus] = createServerAction$(async (_, { request }) => {
     const data = await getUser(request)
     console.log(data)
     return data
-
   })
-
-
-  const [Cookie, sendCookie] = createServerAction$((user:FormData) =>  { 
-
-
+  const [, sendCookie] = createServerAction$((user:FormData) =>  { 
   const  cookie = {  
     email: user.get("email") as string,
     username: user.get("username") as string,
     userId : "1",
     user  : true,
-  loggedIn : true
-    
+    loggedIn : true
    }  
   // server side cookie 
    caller.register.cookie(cookie)
    caller.database.example()
-
-
-
-
-    return createUserSession(cookie, "/app/profiles")
-
-
-
-
-
-
-
-
-
-  }) 
-
-  //  send data to the server the form data  
-
-
+    return createUserSession(cookie, "/app/profiles")}) 
   const [form, setForm] = createServerAction$(async (form: FormData, { request }) => {
     try {
       const output = await caller.register.register(form)
@@ -70,6 +42,10 @@ export default function Register() {
     return result.success ? result.data : result.error.issues.map((issue) => issue)
   }
 
+
+
+
+
   const onClientSubmit = (data: registerForm | z.ZodIssue[]) => {
     if (Array.isArray(data)) {
       const issues = data.map((issue) => { return { path: issue.path, message: issue.message } })
@@ -81,6 +57,7 @@ export default function Register() {
 
     }
   }
+
   const onServerSubmit = (data: FormData) => {
     console.log(data.get("email"))
     try {
@@ -93,9 +70,7 @@ export default function Register() {
     catch (e) {
       console.log(e)
     }
-
     sendCookie(data);
-
   }
 
   const MockSumbit = () => {

@@ -11,4 +11,6 @@ export const registerFormSchema = zfd.formData({
     { message: "email and username cannot be the same", path: ["email", "username"], })
 
 
+export const loginFormSchema = zfd.formData({ email: z.string().email(), password: z.string().min(5).max(20) }) // .refine(data => data.email !== data.username,
 
+export const SessionsVerif = z.object({ email: z.string().email(), password: z.string().min(5).max(20) });

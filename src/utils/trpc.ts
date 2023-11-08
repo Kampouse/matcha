@@ -21,6 +21,8 @@ export function setToken(newToken: UserSession) {
 
 
   //document.cookie = `token=${newToken}; path=/;`;
+
+
   token = JSON.stringify(newToken);
 }
 export function getToken() { return token; }

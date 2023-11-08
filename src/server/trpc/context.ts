@@ -48,7 +48,7 @@ export const createContextInner = async (
     if (serverSide === "" || serverSide === undefined) {
       return null;
     }
-    console.log("getUserServerSide", serverSide);
+    console.log("getUserServerSide ->", serverSide);
     const data = JSON.parse(serverSide);
     const output = userSessionSchema.safeParse(data);
     return output.success ? output.data : null;

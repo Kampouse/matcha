@@ -12,7 +12,7 @@ export default router({
     }),
     example: auth.query(({ ctx }) => {
         const user = ctx.getUserServerSide()
-        console.log(user?.username)
+        console.log("server side", user?.username)
         return ctx.Turso.execute("select * from example_users").then((result) => {
             return User.parse(result.rows.map((row) => {
                 return { uid: row.uid, email: row.email }
