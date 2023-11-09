@@ -1,5 +1,5 @@
 import { Headless } from "~/components/HeadLess";
-import { createServerData$, createServerAction$, redirect } from 'solid-start/server';
+import { createServerData$, createServerAction$, redirect, ServerError } from 'solid-start/server';
 import { createUserSession, getUser, UserSession } from '~/lib/session';
 import { caller } from "~/server/trpc/router/_app"
 import { loginFormSchema } from "~/utils/schemas"
@@ -24,23 +24,22 @@ export default function Login() {
   }
   
     //onClientSubmit(validatedContent) ? onServerSubmit(validatedContent) : console.log("fall back to error state here") }
-  const [, sendLogin] = createServerAction$(async (form: loginFormSchema) => {
+  const [, sendLogin] = createServerAction$(async (form: loginFormSchema,event) => {
     try {
       if (Array.isArray(form)) {
         return form
       }
-      console.log(form)
-      const cookie = {
-      email: form.email,
-      username:form.email,
-      userId: "1",
-      user: true,
-      loggedIn: true
-    }
       const output = await caller.register.login(form)
-      const user = await caller.register.cookie(cookie)
+        console.log(output)
+        if (output === null) {
+          return new ServerError("invalid login")
+        } 
+    const  who = await getUser(event.request)
+
+  console.log( who)
+    const user = await caller.register.cookie(output)
     const stuff =  await caller.database.example()
-      return  createUserSession(cookie, "/app/profiles")
+      return  createUserSession(output, "/app/profiles")
     }
     catch (e) {
       return e
@@ -108,7 +107,7 @@ const handleSubmit = (e: Event) => {
 
           <div class="flex flex-col items-center justify-center    w-96 h-[25rem] border-1  ">
             <input name="email" type="text" placeholder="email" value={mockFn("email")} class="bg-transparent border border-1 border-gray-900 text-center text-slate-50" />
-            <input name="password" type="text" placeholder="password" value={mockFn("password")} class="bg-transparent border border-1 border-gray-900 text-slate-50 text-center" />
+            <input name="password" type="password" placeholder="password" value={mockFn("password")} class="bg-transparent border border-1 border-gray-900 text-slate-50 text-center" />
 
             <button class="mt-6" type="submit" > hello </button>
           </div>
