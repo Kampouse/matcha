@@ -16,11 +16,13 @@ export const appRouter = router({
   session
 });
 const ctx = useServerContext();
-const header = { "Set-Cookie": ctx.request?.headers }
+const cookieHeaders = new Headers();
+cookieHeaders.set("Set-Cookie", ctx.request?.headers.get("Cookie") ?? "");
+
 export const caller = appRouter.createCaller({
   req: ctx.request,
   res: {
-    headers: header
+    headers: cookieHeaders
   },
   db: db,
   getUserServerSide: () => { return null }
