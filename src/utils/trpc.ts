@@ -42,6 +42,7 @@ export const trpc = createTRPCSolidStart<IAppRouter>({
             return {
               // save to cookie
 
+              Authorization: token,
             };
           }
 
