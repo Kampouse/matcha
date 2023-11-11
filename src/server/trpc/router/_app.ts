@@ -9,11 +9,11 @@ import { useServerContext } from "solid-start";
 //trpc.register. register. useQuery(() => content)
 import example from "./example";
 import database from "./database";
-import register from "./register";
+import session from "./session";
 export const appRouter = router({
   example,
   database,
-  register
+  session
 });
 const ctx = useServerContext();
 const header = { "Set-Cookie": ctx.request?.headers }

@@ -24,7 +24,15 @@ export default createHandler(
 
           }          
             console.log("awaited",user)
-            caller.register.cookie(userSessionSchema.parse(user))
+
+
+            const cookie = userSessionSchema.safeParse(user)
+            if (cookie.success) {
+           // caller.session.cookie(cookie.data)
+            }
+            else {
+              console.log("cookie", cookie.error)
+            }
              console.log("called from entry server")
 
 

@@ -2,13 +2,24 @@ import { set, z } from "zod";
 import { IAppRouter } from "./_app";
 import { procedure, router, auth } from "../utils";
 import { getUser } from "~/lib/session";
+import type { ResultSet } from "@libsql/client/.";
 const User = z.array(z.object({
     uid: z.string(),
     email: z.string(),
 }))
 export default router({
-    raw: procedure.input(z.string()).query(({ ctx, input }) => {
-        return ctx.Turso.execute(input)
+    raw: auth.input(z.string()).query(async ({ ctx, input }) => {
+        let data: ResultSet | null = null
+        try {
+
+            data = await ctx.Turso.execute(input)
+        }
+        catch (e) {
+            console.log(e)
+            return null
+        }
+
+        return data
     }),
     example: auth.query(({ ctx }) => {
         const user = ctx.getUserServerSide()

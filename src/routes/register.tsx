@@ -1,12 +1,9 @@
-import {
-  POST, GET
-} from '~/routes/api/session';
-import { createServerData$, createServerAction$, redirect } from 'solid-start/server';
+
+import { createServerAction$ } from 'solid-start/server';
 import { Headless } from '~/components/HeadLess';
 import { createUserSession, getUser, UserSession } from '~/lib/session';
 import type z from 'zod';
 import { registerFormSchema } from "~/utils/schemas"
-import { catchError } from 'solid-js';
 import { caller } from "~/server/trpc/router/_app"
 export default function Register() {
   type registerForm = z.infer<typeof registerFormSchema> | z.ZodIssue[]
@@ -19,17 +16,17 @@ export default function Register() {
   const  cookie = {  
     email: user.get("email") as string,
     username: user.get("username") as string,
-    userId : "1",
+    userId : "",
     user  : true,
     loggedIn : true
    }  
   // server side cookie 
-   caller.register.cookie(cookie)
+   caller.session.cookie(cookie)
    caller.database.example()
     return createUserSession(cookie, "/app/profiles")}) 
   const [form, setForm] = createServerAction$(async (form: FormData, { request }) => {
     try {
-      const output = await caller.register.register(form)
+      const output = await caller.session.register(form)
       return output
     }
     catch (e) {

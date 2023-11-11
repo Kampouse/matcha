@@ -56,9 +56,6 @@ export async function getUser(request: Request) {
 export async function createUserSession(user: UserSession, redirectTo: string) {
     const session = await storage.getSession();
     console.log("createUserSession", user.userId, redirectTo);
-
-
-
     session.set("userId", user.userId);
     session.set("username", user.username);
     session.set("loggedIn", true);

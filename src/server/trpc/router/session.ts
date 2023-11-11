@@ -18,12 +18,22 @@ export default router({
 
     register: procedure.input(registerFormSchema).query(async ({ input, ctx }) => {
 
-        console.log("register", input);
         // find a user with the same email
         // if the user exists return null
 
+        function sanitizeString(str: string) {
+            str = str.replace(/[^a-z0-9áéíóúñü \.,_-]/gim, "");
+            return str.trim();
+        }
+        input.email = sanitizeString(input.email)
+        input.username = sanitizeString(input.username)
+        input.password = sanitizeString(input.password)
+        input.re_password = sanitizeString(input.re_password)
         const isEmpty = await caller.database.raw(`select * from users where email =
              '${input.email}'`).then((result) => {
+            if (result === null) {
+                return Error("database error")
+            }
             if (result.rows.length == 0) {
                 return true
             }
@@ -37,13 +47,12 @@ export default router({
             // convert the array to a hex string
             const hex = Array.prototype.map.call(key, x => ('00' + x.toString(16)).slice(-2)).join('');
             console.log("hex", hex);
-            const result = await caller.database.raw(`insert into users (name,email,
+            await caller.database.raw(`insert into users (name,email,
                  username,password_hash) values ( 
                 '${input.email}','${input.email}',  '${input.username}' 
                 ,'${hex}')`);
-            console.log("result", result);
             const data = {
-                userId: "2",
+                userId: "",
                 username: input.email,
                 loggedIn: true,
                 user: true,
@@ -57,21 +66,24 @@ export default router({
     }),
     login: procedure.input(SessionsVerif).query(async ({ input, ctx }) => {
         //#TODO replace that with a database call to check if the user exists
-        const data = await caller.database.raw(`select password_hash from users where email = '${input.email}'`)
+        const data = await caller.database.raw(`select password_hash,id from users where email = '${input.email}'`)
+        if (data === null) {
+            return Error("database error")
+        }
         if (data.rows.length == 0) {
             return null
         }
-
-        const user = data.rows[0] as { password_hash: string }
-
-        if (user) {
-            console.log(user.password_hash)
-            const hash = user.password_hash
-            const client_hash = await caller.register.password(input.password)
-            console.log("client_hash", client_hash, "hash", hash)
+        const userschema = z.object({ password_hash: z.string(), id: z.number() })
+        const user = userschema.safeParse(data.rows[0])
+        if (!user.success) {
+            return null
+        }
+        if (user !== null) {
+            const hash = user.data.password_hash
+            const client_hash = await caller.session.password(input.password)
             if (hash === client_hash) {
                 const data = {
-                    userId: "2",
+                    userId: String(user.data.id),
                     username: input.email,
                     loggedIn: true,
                     user: true,
@@ -90,7 +102,7 @@ export default router({
 
 
     }),
-    cookie: procedure.input(userSessionSchema).query(({ input, ctx }) => {
+    cookie: procedure.input(userSessionSchema).query(({ input }) => {
         setToken(input)
         return input
     })

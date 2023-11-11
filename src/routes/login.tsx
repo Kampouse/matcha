@@ -4,11 +4,21 @@ import { createUserSession, getUser, UserSession } from '~/lib/session';
 import { caller } from "~/server/trpc/router/_app"
 import { loginFormSchema } from "~/utils/schemas"
 import type  z from 'zod';
+import { constants } from "buffer";
+import { log } from "console";
 export default function Login() {
 
   type loginFormSchema = z.infer<typeof loginFormSchema> | z.ZodIssue[]
+
+
+
   const Validation = (formData: FormData) => {
+
+
+
+
     const result = loginFormSchema.safeParse(formData);
+
     return result.success ? result.data :  null
   }
   const onClientSubmit = (data: loginFormSchema | z.ZodIssue[]) => {
@@ -25,20 +35,30 @@ export default function Login() {
   
     //onClientSubmit(validatedContent) ? onServerSubmit(validatedContent) : console.log("fall back to error state here") }
   const [, sendLogin] = createServerAction$(async (form: loginFormSchema,event) => {
+function sanitizeString(str:string){
+    str = str.replace(/[^a-z0-9áéíóúñü \.,_-]/gim,"");
+    return str.trim();
+}
+
+
     try {
       if (Array.isArray(form)) {
         return form
       }
-      const output = await caller.register.login(form)
+
+      const output = await caller.session.login(form)
+
+      // look if an Error
+      if (output instanceof Error) {
+        return new  ServerError("server error", {status: 500})
+      }
         console.log(output)
         if (output === null) {
           return new ServerError("invalid login")
         } 
-    const  who = await getUser(event.request)
+      
+        caller.session.cookie(output)
 
-  console.log( who)
-    const user = await caller.register.cookie(output)
-    const stuff =  await caller.database.example()
       return  createUserSession(output, "/app/profiles")
     }
     catch (e) {
@@ -72,6 +92,8 @@ const handleSubmit = (e: Event) => {
     const form = e.target as HTMLFormElement;
     e.preventDefault();
     const formData = new FormData(form);
+     
+
     const validatedContent = Validation(formData)
   if (validatedContent === null) {
     console.log("error state")
