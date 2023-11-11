@@ -7,7 +7,7 @@ import type { UserSession } from "~/lib/session";
 let token: string;
 const getBaseUrl = () => {
   if (typeof window !== "undefined") return "";
-  else return `https://${process.env.VERCEL_URL}`;
+  else return `https://${process.env.VITE_VERCEL_URL}`;
 };
 
 export function setToken(newToken: UserSession) {
