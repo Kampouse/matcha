@@ -7,11 +7,15 @@ import { A } from "@solidjs/router"
 import { trpc } from '~/utils/trpc';
  const Layout: VoidComponent = () => {
    
- const data =  trpc.database.example.useQuery()
+// const data =  trpc.database.example.useQuery()
   return (
 <div>
        <Headless >
-            <h1 class=" " />
+        <h1>
+          
+      hello
+
+            </h1>
           <Outlet />
         </Headless>
 </div>
