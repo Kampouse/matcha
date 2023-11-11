@@ -32,7 +32,7 @@
     "vitest": "^0.34.6"
   },
   "dependencies": {
-    "@libsql/client": "^0.3.6",
+    "@libsql/client": "^0.3.3",
     "@solid-mediakit/trpc": "^1.0.2",
     "@solid-primitives/start": "^0.0.2",
     "@solidjs/meta": "^0.28.6",
