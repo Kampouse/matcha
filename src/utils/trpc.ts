@@ -7,10 +7,7 @@ import type { UserSession } from "~/lib/session";
 let token: string;
 const getBaseUrl = () => {
   if (typeof window !== "undefined") return "";
-  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
-  // replace example.com with your actual production url
-  if (process.env.NODE_ENV === "production") return "https://example.com";
-  return `http://localhost:${process.env.PORT ?? 5454}`;
+  else return `https://${process.env.VERCEL_URL}`;
 };
 
 export function setToken(newToken: UserSession) {
