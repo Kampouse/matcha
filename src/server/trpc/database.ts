@@ -11,5 +11,4 @@ const configSchema = z.object({
     username: z.string(),
     password: z.string(),
 })
-const parsedConfig = configSchema.parse(config)
-export const Clientdb = new Client(parsedConfig).connection()
+export const Clientdb = new Client(config).connection()
