@@ -14,13 +14,13 @@ export default createHandler(
 
         //look if the url start with /app/ if it does then check if the user is logged in 
       const run = false;
-        const url = new URL(event.request.url)
+      const url = new URL(event.request.url)
         if (url.pathname.startsWith("/app/")) {
            
-          const user = await getUser(event.request)
+                const user = await getUser(event.request)
           if ( user === null || user?.username === undefined )
           {
-            return redirect("/", { status: 302 });
+            return  redirect("/")
 
           }          
             console.log("awaited",user)

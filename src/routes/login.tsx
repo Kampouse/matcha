@@ -48,6 +48,7 @@ function sanitizeString(str:string){
 
       const output = await caller.session.login(form)
 
+      console.log("what is going on here", output)
       // look if an Error
       if (output instanceof Error) {
         return new  ServerError("server error", {status: 500})
