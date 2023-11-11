@@ -7,25 +7,24 @@ const User = z.array(z.object({
     uid: z.string(),
     email: z.string(),
 }))
+const raw = z.object({
+    input: z.string(),
+    params: z.array(z.any())
+})
 export default router({
-    raw: procedure.input(z.string()).query(async ({ ctx, input }) => {
-        let data: ResultSet | null = null
-        try {
 
-            data = await ctx.Turso.execute(input)
-        }
-        catch (e) {
-            console.log(e)
-            return null
-        }
+    raw: procedure.input(raw).query(async ({ ctx, input }) => {
 
-        return data
+        const stuff = await ctx.db.execute(input.input, [...input.params])
+        console.log("raw", stuff);
+
+        return stuff.rows
+
+
     }),
     example: procedure.query(({ ctx }) => {
-        return ctx.Turso.execute("select * from example_users").then((result) => {
-            return User.parse(result.rows.map((row) => {
-                return { uid: row.uid, email: row.email }
-            }))
+        return ctx.db.execute("select * from example_users").then((result) => {
+            return result.rows
         })
 
     }),

@@ -22,7 +22,7 @@ export default function Register() {
    }  
   // server side cookie 
    caller.session.cookie(cookie)
-   caller.database.example()
+   //caller.database.example()
     return createUserSession(cookie, "/app/profiles")}) 
   const [form, setForm] = createServerAction$(async (form: FormData, { request }) => {
     try {

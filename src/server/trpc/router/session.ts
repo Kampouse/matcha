@@ -17,24 +17,23 @@ export default router({
     }),
 
     register: procedure.input(registerFormSchema).query(async ({ input, ctx }) => {
-
-        // find a user with the same email
-        // if the user exists return null
-
         function sanitizeString(str: string) {
             str = str.replace(/[^a-z0-9áéíóúñü \.,_-]/gim, "");
             return str.trim();
         }
-        input.email = sanitizeString(input.email)
+        input.email = input.email
         input.username = sanitizeString(input.username)
         input.password = sanitizeString(input.password)
         input.re_password = sanitizeString(input.re_password)
-        const isEmpty = await caller.database.raw(`select * from users where email =
-             '${input.email}'`).then((result) => {
+        const isEmpty = await caller.database.raw({
+            input: `select * from users where email =
+             '${input.email}'`,
+            params: []
+        }).then((result) => {
             if (result === null) {
                 return Error("database error")
             }
-            if (result.rows.length == 0) {
+            if (result.length == 0) {
                 return true
             }
             else {
@@ -46,11 +45,12 @@ export default router({
             const key = await pbkdf.pbkdf2(input.password, ray, 1000, 32, 'SHA-256');
             // convert the array to a hex string
             const hex = Array.prototype.map.call(key, x => ('00' + x.toString(16)).slice(-2)).join('');
-            console.log("hex", hex);
-            await caller.database.raw(`insert into users (name,email,
+            const stuff = await caller.database.raw({
+                input: `insert into users (name,email,
                  username,password_hash) values ( 
                 '${input.email}','${input.email}',  '${input.username}' 
-                ,'${hex}')`);
+                ,'${hex}')`, params: []
+            });
             const data = {
                 userId: "",
                 username: input.email,
@@ -61,26 +61,38 @@ export default router({
             return data;
         }
         else {
+
+            console.log("stuff");
             return null
         }
     }),
     login: procedure.input(SessionsVerif).query(async ({ input, ctx }) => {
-        //#TODO replace that with a database call to check if the user exists
-        const data = await caller.database.raw(`select password_hash,id from users where email = '${input.email}'`)
+        const email = input.email.replace("@", "")
+        const data = await caller.database.raw({ input: `select password_hash,id  from users where email=?`, params: [email] })
+
+
+        console.log("login", data);
         if (data === null) {
             return Error("database error")
         }
-        if (data.rows.length == 0) {
+        if (data.length == 0) {
+
             return null
         }
-        const userschema = z.object({ password_hash: z.string(), id: z.number() })
-        const user = userschema.safeParse(data.rows[0])
+        const userschema = z.object({ password_hash: z.string(), id: z.string() })
+        const user = userschema.safeParse(data[0])
         if (!user.success) {
             return null
         }
         if (user !== null) {
+
             const hash = user.data.password_hash
-            const client_hash = await caller.session.password(input.password)
+            function sanitizeString(str: string) {
+                str = str.replace(/[^a-z0-9áéíóúñü \.,_-]/gim, "");
+                return str.trim();
+            }
+            const client_hash = await caller.session.password(sanitizeString(input.password))
+            console.log("login", hash, client_hash);
             if (hash === client_hash) {
                 const data = {
                     userId: String(user.data.id),

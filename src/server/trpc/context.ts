@@ -1,6 +1,6 @@
 import { appRouter } from './router/_app';
 import type { inferAsyncReturnType } from "@trpc/server";
-import { Turso } from './database';
+import { Clientdb as db } from './database';
 import type { createSolidAPIHandlerContext } from "solid-start-trpc";
 import { set } from "zod";
 import { json, useServerContext } from "solid-start";
@@ -28,15 +28,6 @@ export async function getUserTPC(request: Request) {
 
 export const createContextInner = async (
   opts: createSolidAPIHandlerContext) => {
-
-
-
-
-
-
-
-
-
   const { req, res } = opts;
   const user = async () => {
     return await getUserTPC(req);
@@ -56,7 +47,7 @@ export const createContextInner = async (
 
 
   return {
-    req, res, Turso, getUserServerSide
+    req, res, db, getUserServerSide
   };
 };
 

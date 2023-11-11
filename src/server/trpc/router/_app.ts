@@ -1,4 +1,3 @@
-import { Turso } from './../database';
 import { router } from './../utils';
 import { createSolidAPIHandler, createSolidAPIHandlerContext } from 'solid-start-trpc';
 import { getUserTPC } from './../context';
@@ -10,6 +9,7 @@ import { useServerContext } from "solid-start";
 import example from "./example";
 import database from "./database";
 import session from "./session";
+import { Clientdb as db } from "../database"
 export const appRouter = router({
   example,
   database,
@@ -22,7 +22,7 @@ export const caller = appRouter.createCaller({
   res: {
     headers: header
   },
-  Turso: Turso,
+  db: db,
   getUserServerSide: () => { return null }
 
 })

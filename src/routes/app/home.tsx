@@ -12,9 +12,7 @@ const List  =  () => {
   return (
     <div>
       <h1>list</h1>
-      <For each={value?.data}>
-        {(item) => <div>{item.email}</div>}
-      </For>
+
       
       </div>
   );
