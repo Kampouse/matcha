@@ -8,7 +8,7 @@ const User = z.array(z.object({
     email: z.string(),
 }))
 export default router({
-    raw: auth.input(z.string()).query(async ({ ctx, input }) => {
+    raw: procedure.input(z.string()).query(async ({ ctx, input }) => {
         let data: ResultSet | null = null
         try {
 

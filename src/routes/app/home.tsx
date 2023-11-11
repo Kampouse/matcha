@@ -9,8 +9,6 @@ import { trpc } from '~/utils/trpc';
 const List  =  () => {
  const value = trpc.database.example.useQuery()
   value.isSuccess && console.log(value?.data)
-
-
   return (
     <div>
       <h1>list</h1>
