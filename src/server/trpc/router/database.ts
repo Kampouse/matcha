@@ -21,7 +21,7 @@ export default router({
 
         return data
     }),
-    example: auth.query(({ ctx }) => {
+    example: procedure.query(({ ctx }) => {
         const user = ctx.getUserServerSide()
         console.log("server side", user?.username)
         return ctx.Turso.execute("select * from example_users").then((result) => {
