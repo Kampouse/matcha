@@ -14,7 +14,7 @@
   "devDependencies": {
     "@solidjs/testing-library": "^0.8.4",
     "@testing-library/jest-dom": "^6.1.4",
-    "@types/node": "^18.14.0",
+    "@types/node": "20.9.0",
     "@typescript-eslint/eslint-plugin": "^5.52.0",
     "@typescript-eslint/parser": "^5.52.0",
     "@vitest/coverage-v8": "^0.34.6",
