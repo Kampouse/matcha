@@ -6,7 +6,7 @@ settings:
 
 dependencies:
   '@libsql/client':
-    specifier: ^0.3.2
+    specifier: ^0.3.1
     version: 0.3.6
   '@solid-mediakit/trpc':
     specifier: ^1.0.2
